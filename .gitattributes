@@ -1,0 +1,12 @@
+# Normaliza los finales de línea en el repo a LF; en Windows se extraen como CRLF.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ogg binary
+*.mp3 binary
+*.dll binary
+*.exe binary
+*.sf2 binary
+*.rxdata binary
+*.dat binary

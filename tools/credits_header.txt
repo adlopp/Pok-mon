@@ -1,0 +1,21 @@
+POKÉMON ULTRA YEA — CRÉDITOS
+============================
+
+Fangame sin ánimo de lucro, hecho por fans y para fans. No está afiliado,
+patrocinado ni respaldado por Nintendo, Game Freak ni The Pokémon Company.
+"Pokémon", los nombres de los Pokémon y demás marcas y personajes son
+propiedad de sus respectivos dueños. Todo el material con copyright se usa
+sin intención de infringir derechos y sin ningún fin comercial. Este juego
+es gratuito y no se puede vender.
+
+Motor
+  - Pokémon Essentials v21.1 — Maruno, Poccil (Peter O.), Flameguru
+    y la comunidad de Essentials.
+  - mkxp-z — Ancurio, Struma, Roza y colaboradores (ejecución del juego,
+    Game.exe y las DLL asociadas).
+
+Base del proyecto
+  - "La Base De Sky".
+
+Desarrollo de Pokémon Ultra Yea
+  - crolopez  (añade aquí a tu equipo, testers, spriters, músicos...).

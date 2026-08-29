@@ -1,0 +1,43 @@
+# ============================================================
+#  Repositorio PÚBLICO de Pokémon Ultra Yea
+#  Solo contiene el launcher + herramientas + documentación.
+#  El JUEGO se distribuye como assets de cada Release, NO aquí.
+# ============================================================
+
+# --- Contenido del juego (nunca se sube a este repo) --------
+/Audio/
+/Data/
+/Fonts/
+/Graphics/
+/PBS/
+/Plugins/
+/Ruby Library 3.3.0/
+/Tilesets Gen4/
+/Game.exe
+/Game.ini
+/Game.rxproj
+/mkxp.json
+/preload.rb
+/soundfont.sf2
+/*.dll
+/.nomedia
+
+# --- Salida de compilación / empaquetado -------------------
+/build/
+/Launcher/bin/
+/Launcher/obj/
+/Launcher/dist/
+
+# --- Logs / temporales ------------------------------------
+*.log
+launcher.log
+.write_test_*
+notes.md
+
+# --- Editor / sistema operativo ---------------------------
+.vscode/*
+!.vscode/settings.json
+Thumbs.db
+desktop.ini
+*.tmp
+*~

@@ -1,0 +1,27 @@
+{
+    // ----------------------------------------------------------------------
+    //  Rellena estos dos con TU repositorio de GitHub (donde publicas las
+    //  Releases del juego). Es lo único obligatorio.
+    // ----------------------------------------------------------------------
+    "repoOwner": "adlopp",
+    "repoName": "pokemon-ultra-yea",
+
+    // Ejecutable del juego que se abre tras comprobar/aplicar la actualización.
+    "gameExe": "Game.exe",
+
+    // Nombre del .zip en la Release (solo se usa si no hay manifest.json).
+    "assetPattern": "UltraYea-*.zip",
+
+    // Asset opcional con metadatos (versión, sha256, notas, borrados).
+    // Lo genera tools/build_release.ps1. Déjalo así.
+    "manifestAsset": "manifest.json",
+
+    // true = tener en cuenta también las Releases marcadas como "pre-release".
+    "includePrereleases": false,
+
+    // true = si ya estás al día, abrir el juego automáticamente sin tocar nada.
+    "autoLaunchWhenUpToDate": true,
+
+    // true = permitir "Jugar" sin actualizar (salvo que la actualización sea obligatoria).
+    "allowSkipUpdate": true
+}
