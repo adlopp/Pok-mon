@@ -40,8 +40,11 @@ Write-Host "== Pokemon Ultra Yea - build de release $Version ==" -ForegroundColo
 # --- 0. Notas de version ------------------------------------------------------
 if ($NotesFile) {
     if (-not (Test-Path -LiteralPath $NotesFile)) { throw "No existe el archivo de notas: $NotesFile" }
-    $Notes = Get-Content -Raw -LiteralPath $NotesFile
+    # ReadAllText -> string limpio en UTF-8 (Get-Content adorna el string con
+    # metadatos que ConvertTo-Json luego expande y rompe el manifest).
+    $Notes = [System.IO.File]::ReadAllText((Resolve-Path -LiteralPath $NotesFile).Path, [System.Text.Encoding]::UTF8)
 }
+$Notes = [string]$Notes
 
 # --- 1. Compilar el launcher ------------------------------------------------
 if (-not $LauncherExe) { $LauncherExe = Join-Path $root "Launcher\dist\Launcher.exe" }
