@@ -102,17 +102,38 @@ Copy-Item -LiteralPath (Join-Path $root "Launcher\launcher_config.json") -Destin
 Copy-Item -LiteralPath (Join-Path $root "release-assets\README.txt") -Destination $stage
 & (Join-Path $root "tools\make_credits.ps1") -OutFile (Join-Path $stage "CREDITS.txt")
 
-# --- 6. Comprobacion anti-fugas de material de desarrollo ------------
-$forbiddenNames = @("PBS", "Plugins", ".vscode", ".git", "Tilesets Gen4",
-    "Game.rxproj", "rubocop.yml", ".editorconfig", ".nomedia", "RELEASING.md")
-$leak = Get-ChildItem -LiteralPath $stage -Recurse -Force | Where-Object {
-    ($forbiddenNames -contains $_.Name) -or ($_.Name -match "(?i)\.(rxproj|bak|psd|kra)$")
-}
-if ($leak) {
+# --- 6. Comprobacion anti-fugas -------------------------------------
+# 6a. En la RAIZ del paquete solo puede haber material jugable (lista blanca).
+#     Asi se detecta PBS/, Plugins/, .vscode/, Game.rxproj, etc. sin dar falsos
+#     positivos con carpetas legitimas anidadas como Graphics\Plugins.
+$allowedTop = @(
+    "Game.exe", "Game.ini", "mkxp.json", "preload.rb", "soundfont.sf2",
+    "RGSS104E.dll", "libgcc_s_seh-1.dll", "libgomp-1.dll", "libwinpthread-1.dll",
+    "x64-msvcrt-ruby310.dll", "zlib1.dll",
+    "Audio", "Fonts", "Graphics", "Ruby Library 3.3.0", "Data",
+    "Launcher.exe", "launcher_config.json", "version.txt", "README.txt", "CREDITS.txt"
+)
+$unexpected = Get-ChildItem -LiteralPath $stage -Force | Where-Object { $allowedTop -notcontains $_.Name }
+if ($unexpected) {
     Write-Host ""
-    Write-Host "SE HA COLADO MATERIAL DE DESARROLLO EN EL PAQUETE:" -ForegroundColor Red
-    $leak.FullName | ForEach-Object { Write-Host "   $_" -ForegroundColor Red }
-    throw "Abortado. Revisa la lista blanca de build_release.ps1."
+    Write-Host "ARCHIVOS INESPERADOS EN LA RAIZ DEL PAQUETE:" -ForegroundColor Red
+    $unexpected.FullName | ForEach-Object { Write-Host "   $_" -ForegroundColor Red }
+    throw "Abortado. En la raiz del paquete solo debe haber material jugable."
+}
+
+# 6b. Poda de basura en cualquier nivel (backups, arte fuente, temporales del SO).
+#     No aborta: son archivos que el juego no usa; simplemente no se distribuyen.
+$junk = Get-ChildItem -LiteralPath $stage -Recurse -Force -File | Where-Object {
+    $_.Extension -match "(?i)^\.(psd|kra|clip|xcf|ai|rxproj|bak)$" -or
+    $_.Name -match "(?i)(_backup|backup_|\bbackup\b|_orig\.|\.orig\b)" -or
+    $_.Name -in @("Thumbs.db", "desktop.ini", ".DS_Store")
+}
+if ($junk) {
+    Write-Host "-- podando $($junk.Count) archivo(s) que el juego no usa:" -ForegroundColor DarkYellow
+    $junk | ForEach-Object {
+        Write-Host ("   {0}" -f $_.FullName.Substring($stage.Length + 1)) -ForegroundColor DarkYellow
+        Remove-Item -LiteralPath $_.FullName -Force
+    }
 }
 
 # --- 7. Zip (con carpeta raiz, para una extraccion ordenada) ---------

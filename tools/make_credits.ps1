@@ -5,6 +5,8 @@
 
   Uso:
       .\tools\make_credits.ps1 -OutFile .\build\CREDITS.txt
+
+  Todo se lee y se escribe como UTF-8 (PowerShell 5.1 asume ANSI si no se dice).
 #>
 param(
     [Parameter(Mandatory)] [string] $OutFile
@@ -17,7 +19,7 @@ $sb = [System.Text.StringBuilder]::new()
 
 $headerPath = Join-Path $root "tools\credits_header.txt"
 if (Test-Path -LiteralPath $headerPath) {
-    [void]$sb.AppendLine((Get-Content -Raw -LiteralPath $headerPath).TrimEnd())
+    [void]$sb.AppendLine((Get-Content -Raw -Encoding UTF8 -LiteralPath $headerPath).TrimEnd())
 }
 
 [void]$sb.AppendLine()
@@ -31,7 +33,7 @@ Get-ChildItem -LiteralPath $pluginsDir -Directory | Sort-Object Name | ForEach-O
     if (-not (Test-Path -LiteralPath $meta)) { return }
 
     $kv = @{}
-    Get-Content -LiteralPath $meta | ForEach-Object {
+    Get-Content -Encoding UTF8 -LiteralPath $meta | ForEach-Object {
         if ($_ -match '^\s*(Name|Version|Credits|Website)\s*=\s*(.+?)\s*$') {
             $kv[$Matches[1]] = $Matches[2].Trim()
         }
@@ -56,5 +58,6 @@ Get-ChildItem -LiteralPath $pluginsDir -Directory | Sort-Object Name | ForEach-O
 [void]$sb.AppendLine(" Si falta alguien, es un error involuntario: avisame y lo corrijo.")
 [void]$sb.AppendLine("================================================================")
 
-Set-Content -LiteralPath $OutFile -Value $sb.ToString() -Encoding utf8
+# UTF-8 con BOM para que se lea bien en el Bloc de notas antiguo.
+[System.IO.File]::WriteAllText($OutFile, $sb.ToString(), (New-Object System.Text.UTF8Encoding($true)))
 Write-Host "-- CREDITS.txt generado" -ForegroundColor DarkGray
