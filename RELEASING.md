@@ -16,26 +16,29 @@ winget install Microsoft.DotNet.SDK.8
 
 Los jugadores **no** necesitan .NET: `Launcher.exe` sale autocontenido.
 
-### 1.2 Crea el repositorio de GitHub
+### 1.2 Repositorio de GitHub
 
-Puede estar casi vacío (solo un README). Lo que importa son las *Releases*.
-
-```powershell
-gh auth login
-gh repo create pokemon-ultra-yea --public --description "Fangame de Pokémon (Essentials + mkxp-z)"
-```
+Ya está creado: **`adlopp/Pok-mon`** (público), en
+<https://github.com/adlopp/Pok-mon>. Contiene solo el launcher y estas
+herramientas; el juego va en las *Releases*.
 
 > El repositorio **público** hace que los assets de las Releases se puedan
 > descargar sin token. Si lo pones privado, el launcher no podrá bajar nada
 > sin autenticación.
+>
+> Si algún día lo renombras (p. ej. a `pokemon-ultra-yea`), GitHub mantiene una
+> redirección, pero actualiza `repoName` en `Launcher/launcher_config.json` y
+> saca una Release nueva para que los launchers ya instalados apunten al
+> nombre nuevo.
 
 ### 1.3 Configura el launcher
 
-Edita [Launcher/launcher_config.json](Launcher/launcher_config.json):
+[Launcher/launcher_config.json](Launcher/launcher_config.json) ya apunta al
+repositorio:
 
 ```json
-"repoOwner": "tu-usuario",
-"repoName":  "pokemon-ultra-yea",
+"repoOwner": "adlopp",
+"repoName":  "Pok-mon",
 ```
 
 ### 1.4 Compila el launcher una vez para probar
@@ -103,7 +106,7 @@ Comparte el enlace del `.zip` de la primera Release, o el enlace permanente
 a la última:
 
 ```
-https://github.com/tu-usuario/pokemon-ultra-yea/releases/latest
+https://github.com/adlopp/Pok-mon/releases/latest
 ```
 
 Si el `.zip` es grande y quieres un espejo, puedes subir una copia a Google

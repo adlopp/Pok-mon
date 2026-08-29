@@ -4,7 +4,7 @@
     //  Releases del juego). Es lo único obligatorio.
     // ----------------------------------------------------------------------
     "repoOwner": "adlopp",
-    "repoName": "pokemon-ultra-yea",
+    "repoName": "Pok-mon",
 
     // Ejecutable del juego que se abre tras comprobar/aplicar la actualización.
     "gameExe": "Game.exe",
