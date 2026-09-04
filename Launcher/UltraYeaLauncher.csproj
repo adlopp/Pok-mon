@@ -12,7 +12,10 @@
     <AssemblyName>Launcher</AssemblyName>
     <AssemblyTitle>Pokémon Ultra Yea Launcher</AssemblyTitle>
     <Product>Pokémon Ultra Yea</Product>
-    <Version>1.0.0</Version>
+    <!-- Sube este numero SOLO cuando cambies codigo del launcher. build_release.ps1
+         lo usa para decidir si Launcher.exe (138 MB) entra o no en el delta zip:
+         si no ha cambiado la version, se queda fuera y el delta pesa unos KB. -->
+    <Version>1.4.0</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
 
@@ -21,7 +24,9 @@
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <!-- Sin comprimir: el exe pesa ~12 MB más pero deja de parecer un "packer",
+         que es lo que dispara la mayoría de falsos positivos de antivirus. -->
+    <EnableCompressionInSingleFile>false</EnableCompressionInSingleFile>
     <DebugType>embedded</DebugType>
 
     <!-- Reduce tamaño quitando recursos de idioma que no usamos. -->

@@ -1,0 +1,13 @@
+# build output
+bin/
+obj/
+dist/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# misc
+*.log

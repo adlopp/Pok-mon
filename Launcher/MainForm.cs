@@ -22,6 +22,7 @@ namespace UltraYeaLauncher
 
         private LauncherConfig _cfg = new LauncherConfig();
         private UpdatePlan? _plan;
+        private bool _updateApplied;   // la actualización se aplicó y version.txt ya está escrito
 
         public MainForm()
         {
@@ -151,6 +152,7 @@ namespace UltraYeaLauncher
             _btnQuit.Enabled = false;
             _bar.Visible = true;
             _bar.Style = ProgressBarStyle.Marquee;
+            _updateApplied = false;
 
             var progress = new Progress<Updater.Progress>(p =>
             {
@@ -174,9 +176,10 @@ namespace UltraYeaLauncher
                 using var gh = new GitHubClient();
                 var updater = new Updater(gh.Raw, LauncherConfig.Dir);
                 updater.EnsureGameDirWritable();
-                await updater.RunAsync(_plan, progress, _cts.Token).ConfigureAwait(true);
+                await updater.RunAsync(_plan, _cfg.ReadLocalVersion(), progress, _cts.Token).ConfigureAwait(true);
 
                 _cfg.WriteLocalVersion(_plan.Version);
+                _updateApplied = true;
                 Log.Write($"Actualización a {_plan.Version} completada.");
                 _progressText.Text = "Actualización completada. Iniciando el juego…";
                 LaunchAndExit();
@@ -184,6 +187,23 @@ namespace UltraYeaLauncher
             catch (OperationCanceledException)
             {
                 Close();
+            }
+            catch (Exception ex) when (_updateApplied)
+            {
+                // La actualización SÍ se aplicó (version.txt ya está en la versión
+                // nueva); lo que falló fue abrir el juego después. No es un fallo
+                // de actualización.
+                Log.Exception("abrir el juego tras actualizar", ex);
+                _bar.Visible = false;
+                _status.Text = $"Actualización a {_plan.Version} aplicada correctamente.";
+                _notes.Text = "El juego ya está actualizado." + Environment.NewLine + Environment.NewLine +
+                              "No he podido abrirlo automáticamente. Cierra esta ventana y vuelve a " +
+                              "abrir el launcher para jugar." + Environment.NewLine + Environment.NewLine +
+                              "Detalle técnico: " + ex.Message;
+                _btnUpdate.Enabled = false;
+                _btnQuit.Enabled = true;
+                _btnPlay.Enabled = File.Exists(GameExePath);
+                _btnPlay.Select();
             }
             catch (Exception ex)
             {

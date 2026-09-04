@@ -1,0 +1,20 @@
+Style/MutableConstant:
+  Enabled: false
+
+Style/SymbolArray:
+    Enabled: false
+
+Style/WordArray:
+    Enabled: false
+
+Style/GlobalVars:
+    Enabled: false
+
+Layout/LineLength:
+    Max: 140
+
+Metrics/MethodLength:
+    Max: 15
+
+Naming/VariableNumber:
+    Enabled: false
